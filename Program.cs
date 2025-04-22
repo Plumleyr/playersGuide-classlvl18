@@ -92,8 +92,6 @@ class Arrow
             }
         }
 
-        Console.WriteLine(fields.Length);
-
         return totalCost;
     }
 }
