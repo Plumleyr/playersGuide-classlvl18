@@ -1,13 +1,13 @@
 ﻿using System.Reflection;
 
-Arrow currentArrow = new Arrow();
+Arrow currentArrow = new();
 
-currentArrow.arrowhead = WriteEnumOptions<Arrowheads>("Welcome to Vin Fletcher's Arrows. Let's start off with picking the arrowhead.");
-currentArrow.fletching = WriteEnumOptions<Fletching>("Next let's pick a fletching for your arrow to be!");
+currentArrow.SetArrowhead(WriteEnumOptions<Arrowheads>("Welcome to Vin Fletcher's Arrows. Let's start off with picking the arrowhead."));
+currentArrow.SetFletching(WriteEnumOptions<Fletching>("Next let's pick a fletching for your arrow to be!"));
 
 Console.WriteLine("Finally let's pick a length for that arrow! Enter an integer in range of 60 - 100");
 
-while(currentArrow.shaftLength == 0)
+while(currentArrow.GetShaftLength == 0)
 {
     if(int.TryParse(Console.ReadLine(), out int choice))
     {
@@ -17,7 +17,7 @@ while(currentArrow.shaftLength == 0)
         }
         else
         {
-            currentArrow.shaftLength = choice;
+            currentArrow.SetShaftLength(choice);
         }
     }
     else
@@ -26,7 +26,7 @@ while(currentArrow.shaftLength == 0)
     }
 } 
 
-Console.WriteLine($"Your {currentArrow.shaftLength}cm arrow with a {currentArrow.arrowhead} arrowhead and {currentArrow.fletching} fletching will be ${currentArrow.GetCost():F2}");
+Console.WriteLine($"Your {currentArrow.GetShaftLength}cm arrow with a {currentArrow.GetArrowhead} arrowhead and {currentArrow.GetFletching} fletching will be ${currentArrow.GetCost():F2}");
 
 T WriteEnumOptions<T>(string prompt) where T : Enum
 {
@@ -64,15 +64,23 @@ T WriteEnumOptions<T>(string prompt) where T : Enum
 
 class Arrow
 {
-    public Arrowheads arrowhead = default;
-    public Fletching fletching = default;
-    public int shaftLength = 0;
+    private Arrowheads arrowhead = default;
+    private Fletching fletching = default;
+    private int shaftLength = 0;
+
+    public Arrowheads GetArrowhead => arrowhead;
+    public Fletching GetFletching => fletching;
+    public int GetShaftLength => shaftLength;
+
+    public void SetArrowhead(Arrowheads value) => arrowhead = value;
+    public void SetFletching(Fletching value) => fletching = value;
+    public void SetShaftLength(int value) => shaftLength = value;
 
     public float GetCost()
     {
         float totalCost = 0;
 
-        FieldInfo[] fields = this.GetType().GetFields();
+        FieldInfo[] fields = this.GetType().GetFields(BindingFlags.Instance | BindingFlags.NonPublic);
 
         foreach (var field in fields)
         {
