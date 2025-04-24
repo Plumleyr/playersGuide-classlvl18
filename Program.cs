@@ -1,11 +1,11 @@
 ﻿Arrow currentArrow = new();
 
-currentArrow.SetArrowhead(WriteEnumOptions<Arrowheads>("Welcome to Vin Fletcher's Arrows. Let's start off with picking the arrowhead."));
-currentArrow.SetFletching(WriteEnumOptions<Fletching>("Next let's pick a fletching for your arrow to be!"));
+currentArrow.Arrowhead = WriteEnumOptions<Arrowheads>("Welcome to Vin Fletcher's Arrows. Let's start off with picking the arrowhead.");
+currentArrow.Fletching = WriteEnumOptions<Fletching>("Next let's pick a fletching for your arrow to be!");
 
 Console.WriteLine("Finally let's pick a length for that arrow! Enter an integer in range of 60 - 100");
 
-while(currentArrow.GetShaftLength == 0)
+while(currentArrow.ShaftLength == 0)
 {
     if(int.TryParse(Console.ReadLine(), out int choice))
     {
@@ -15,7 +15,7 @@ while(currentArrow.GetShaftLength == 0)
         }
         else
         {
-            currentArrow.SetShaftLength(choice);
+            currentArrow.ShaftLength = choice;
         }
     }
     else
@@ -24,7 +24,7 @@ while(currentArrow.GetShaftLength == 0)
     }
 } 
 
-Console.WriteLine($"Your {currentArrow.GetShaftLength}cm arrow with a {currentArrow.GetArrowhead} arrowhead and {currentArrow.GetFletching} fletching will be ${currentArrow.GetCost()}");
+Console.WriteLine($"Your {currentArrow.ShaftLength}cm arrow with a {currentArrow.Arrowhead} arrowhead and {currentArrow.Fletching} fletching will be ${currentArrow.GetCost()}");
 
 T WriteEnumOptions<T>(string prompt) where T : Enum
 {
@@ -62,23 +62,15 @@ T WriteEnumOptions<T>(string prompt) where T : Enum
 
 class Arrow
 {
-    private Arrowheads arrowhead = default;
-    private Fletching fletching = default;
-    private int shaftLength = 0;
-
-    public Arrowheads GetArrowhead => arrowhead;
-    public Fletching GetFletching => fletching;
-    public int GetShaftLength => shaftLength;
-
-    public void SetArrowhead(Arrowheads value) => arrowhead = value;
-    public void SetFletching(Fletching value) => fletching = value;
-    public void SetShaftLength(int value) => shaftLength = value;
+    public Arrowheads Arrowhead { get; set; }
+    public Fletching Fletching { get; set; }
+    public int ShaftLength { get; set; }
 
     public float GetCost()
     {
-        float arrowheadValue = (float)arrowhead;
-        float fletchingValue = (float)fletching;
-        float shaftLengthValue = shaftLength * 0.05F;
+        float arrowheadValue = (float)Arrowhead;
+        float fletchingValue = (float)Fletching;
+        float shaftLengthValue = ShaftLength * 0.05F;
 
         return arrowheadValue + fletchingValue + shaftLengthValue;
     }
