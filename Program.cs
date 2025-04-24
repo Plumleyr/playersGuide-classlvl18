@@ -1,6 +1,4 @@
-﻿using System.Reflection;
-
-Arrow currentArrow = new();
+﻿Arrow currentArrow = new();
 
 currentArrow.SetArrowhead(WriteEnumOptions<Arrowheads>("Welcome to Vin Fletcher's Arrows. Let's start off with picking the arrowhead."));
 currentArrow.SetFletching(WriteEnumOptions<Fletching>("Next let's pick a fletching for your arrow to be!"));
@@ -26,7 +24,7 @@ while(currentArrow.GetShaftLength == 0)
     }
 } 
 
-Console.WriteLine($"Your {currentArrow.GetShaftLength}cm arrow with a {currentArrow.GetArrowhead} arrowhead and {currentArrow.GetFletching} fletching will be ${currentArrow.GetCost():F2}");
+Console.WriteLine($"Your {currentArrow.GetShaftLength}cm arrow with a {currentArrow.GetArrowhead} arrowhead and {currentArrow.GetFletching} fletching will be ${currentArrow.GetCost()}");
 
 T WriteEnumOptions<T>(string prompt) where T : Enum
 {
@@ -78,29 +76,11 @@ class Arrow
 
     public float GetCost()
     {
-        float totalCost = 0;
+        float arrowheadValue = (float)arrowhead;
+        float fletchingValue = (float)fletching;
+        float shaftLengthValue = shaftLength * 0.05F;
 
-        FieldInfo[] fields = this.GetType().GetFields(BindingFlags.Instance | BindingFlags.NonPublic);
-
-        foreach (var field in fields)
-        {
-            var value = field.GetValue(this);
-
-            if (value is Arrowheads arrowheadValue)
-            {
-                totalCost += (float)arrowhead;
-            }
-            else if (value is Fletching fletchingValue)
-            {
-                totalCost += (float)fletchingValue;
-            }
-            else if (value is int shaftLengthValue)
-            {
-                totalCost += shaftLengthValue * 0.05F;
-            }
-        }
-
-        return totalCost;
+        return arrowheadValue + fletchingValue + shaftLengthValue;
     }
 }
 
